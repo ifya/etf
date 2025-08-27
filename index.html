@@ -11,6 +11,102 @@
             box-sizing: border-box;
         }
 
+        /* Copy button styles */
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(100, 181, 246, 0.9);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .copy-button:hover {
+            background: rgba(33, 150, 243, 0.9);
+            transform: translateY(-2px);
+        }
+
+        .copy-button.copied {
+            background: rgba(76, 175, 80, 0.9);
+        }
+
+        .copyable-section {
+            position: relative;
+            padding-top: 15px;
+        }
+
+        /* Navigation Menu */
+        .nav-menu {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            border-radius: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            max-width: 90vw;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .nav-menu::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-item {
+            background: rgba(100, 181, 246, 0.2);
+            border: 1px solid rgba(100, 181, 246, 0.3);
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            font-size: 0.9em;
+            text-decoration: none;
+            color: #e8e8e8;
+            display: inline-block;
+        }
+
+        .nav-item:hover {
+            background: rgba(100, 181, 246, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Mobile responsive navigation */
+        @media (max-width: 768px) {
+            .nav-menu {
+                padding: 10px 15px;
+                gap: 10px;
+                bottom: 10px;
+            }
+            
+            .nav-item {
+                padding: 8px 15px;
+                font-size: 0.85em;
+            }
+        }
+
+        /* Hidden content for copying */
+        .hidden-copy-content {
+            position: absolute;
+            left: -9999px;
+            visibility: hidden;
+        }
+
         body {
             font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 50%, #16213e 100%);
@@ -252,10 +348,85 @@
             color: #64b5f6;
         }
 
+        /* New styles for event details */
+        .hero-list {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .hero-item {
+            padding: 8px;
+            margin: 5px 0;
+            border-left: 3px solid #4caf50;
+            padding-left: 15px;
+        }
+
+        .warning-box {
+            background: rgba(255, 193, 7, 0.2);
+            border: 2px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .rule-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #64b5f6;
+        }
+
+        .rule-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .rule-box li {
+            padding: 8px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .rule-box li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #64b5f6;
+        }
+
+        /* SvS Prep list styles */
+        .svs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15ngitudepx;
+            margin-top: 20px;
+        }
+
+        .svs-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 15px;
+            border-radius: 5px;
+            border-left: 3px solid #9c27b0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .svs-item::before {
+            content: '💎';
+            font-size: 1.2em;
+        }
+
         @media (max-width: 768px) {
             h1 { font-size: 2em; }
             .container { padding: 10px; }
             .section { padding: 15px; }
+            .svs-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -268,7 +439,8 @@
             <p style="font-size: 1.2em; color: #90caf9; margin-top: 10px;">Alliance Planning & Information Hub</p>
         </header>
 
-        <section class="section">
+        <!-- Event Times Section -->
+        <section class="section" id="event-schedule">
             <h2>
                 📅
                 Event Schedule & Favorite Votes
@@ -304,7 +476,70 @@
             </div>
         </section>
 
-        <section class="section">
+        <!-- Bear Traps Detailed Rules -->
+        <section class="section" id="bear-traps">
+            <h2>
+                🐻
+                Bear Traps - Formation & Rules
+            </h2>
+            
+            <h3>Trap Joining Formations</h3>
+            <div class="hero-list copyable-section" id="hero-formations">
+                <button class="copy-button" onclick="copyToClipboard('hero-formations')">
+                    📋 Copy
+                </button>
+                <div class="hero-item">Jeronimo - any hero - any hero</div>
+                <div class="hero-item">Jessie - any hero - any hero</div>
+                <div class="hero-item">Jasser - any hero - any hero</div>
+                <div class="hero-item">Sheoon - any hero - any hero</div>
+                <div class="hero-item">Reina - any hero - any hero</div>
+                <div class="hero-item">Philly - any hero - any hero</div>
+                <div class="hidden-copy-content">
+⚠️ When joining High damage Rallies please only use the top 4 heroes mentioned ⚠️
+Join with ONLY troops if you do not have these heroes.</div>
+            </div>
+
+            <div class="warning-box">
+                ⚠️ When joining High damage Rallies please only use the top 4 heroes mentioned ⚠️
+                <br>Join with ONLY troops if you do not have these heroes.
+            </div>
+
+            <h3>🐻 Bear Rules 🐻</h3>
+            <div class="rule-box copyable-section" id="bear-rules">
+                <button class="copy-button" onclick="copyToClipboard('bear-rules')">
+                    📋 Copy
+                </button>
+                <strong>OPEN Your RALLY:</strong>
+                <ul>
+                    <li>3 best heroes with full army + best hero gear</li>
+                    <li>Join with ~100k troops only and the correct joining heroes (check list)</li>
+                    <li>Troop ratios: 20k-20k-60k or 10k-10k-80k</li>
+                    <li>Send more marksmen - they deal the damage towards bear</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Mercenary Boss Rules -->
+        <section class="section" id="mercenary-boss">
+            <h2>
+                ⚔️
+                Mercenary Boss - Strategy
+            </h2>
+            
+            <div class="rule-box copyable-section" id="mercenary-rules">
+                <button class="copy-button" onclick="copyToClipboard('mercenary-rules')">
+                    📋 Copy
+                </button>
+                <ul>
+                    <li>Attack with only 1 Unit until everyone did a hit</li>
+                    <li>Wait for R4/R5 call for full strength attack</li>
+                    <li>This ensures everyone can benefit from the rewards</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Facilities Section -->
+        <section class="section" id="facilities">
             <h2>
                 🏭
                 Facilities Status & Rotation
@@ -373,7 +608,8 @@
             </div>
         </section>
 
-        <section class="section must-get">
+        <!-- Priority Targets -->
+        <section class="section must-get" id="priority">
             <h2 style="color: #ff7043;">
                 🎯
                 Priority Targets - Must Get!
@@ -385,6 +621,84 @@
                 ⚔️ Attack Level 1 & Level 3
             </div>
         </section>
+
+        <!-- SvS Preparation -->
+        <section class="section" id="svs-prep">
+            <h2>
+                ⚔️
+                SvS Prep Phase - Saving List
+            </h2>
+            
+            <div class="svs-grid copyable-section" id="svs-list">
+                <button class="copy-button" onclick="copyToClipboard('svs-list')">
+                    📋 Copy
+                </button>
+                <div class="svs-item">Fire crystals</div>
+                <div class="svs-item">Construction speedups</div>
+                <div class="svs-item">Training speedups</div>
+                <div class="svs-item">Research speedups</div>
+                <div class="svs-item">General speedups</div>
+                <div class="svs-item">Diamonds for lucky wheel</div>
+                <div class="svs-item">Mythic shards</div>
+                <div class="svs-item">Stamina cans for beast hunts</div>
+                <div class="svs-item">Essence stones</div>
+                <div class="svs-item">Exclusive hero gear widgets</div>
+                <div class="svs-item">Chief gear & charms upgrade items</div>
+                <div class="svs-item">Pet advanced/common wild mark stones</div>
+                <div class="svs-item">Dawn Academy items</div>
+            </div>
+        </section>
     </div>
+
+    <!-- Navigation Menu -->
+    <nav class="nav-menu">
+        <a href="#event-schedule" class="nav-item">📅 Events</a>
+        <a href="#bear-traps" class="nav-item">🐻 Bear</a>
+        <a href="#mercenary-boss" class="nav-item">⚔️ Merc</a>
+        <a href="#facilities" class="nav-item">🏭 Facilities</a>
+        <a href="#priority" class="nav-item">🎯 Priority</a>
+        <a href="#svs-prep" class="nav-item">💎 SvS</a>
+    </nav>
+
+    <script>
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const button = element.querySelector('.copy-button');
+            
+            // Get all text content except the button text
+            let textToCopy = '';
+            const children = element.childNodes;
+            
+            children.forEach(child => {
+                if (child.nodeType === Node.TEXT_NODE) {
+                    textToCopy += child.textContent.trim() + '\n';
+                } else if (child.nodeType === Node.ELEMENT_NODE && !child.classList.contains('copy-button')) {
+                    textToCopy += child.textContent.trim() + '\n';
+                }
+            });
+            
+            // Clean up the text
+            textToCopy = textToCopy.replace(/\n\s*\n/g, '\n').trim();
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                // Change button text temporarily
+                button.innerHTML = '✓ Copied!';
+                button.classList.add('copied');
+                
+                // Reset after 2 seconds
+                setTimeout(() => {
+                    button.innerHTML = '📋 Copy';
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                button.innerHTML = '❌ Failed';
+                setTimeout(() => {
+                    button.innerHTML = '📋 Copy';
+                }, 2000);
+            });
+        }
+    </script>
 </body>
 </html>
